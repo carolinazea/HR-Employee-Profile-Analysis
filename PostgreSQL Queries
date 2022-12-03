@@ -1,0 +1,188 @@
+Creating Table: 
+
+CREATE TABLE hr(
+	emp_id SERIAL,
+	Age integer,
+	Attrition VARCHAR (50),
+	Business_Travel VARCHAR (50),
+	Daily_Rate integer,
+	Department VARCHAR (50),
+ 	Distance_From_Home integer,
+	Education VARCHAR (50),
+	Education_Field VARCHAR (50),
+	Employee_Count integer,
+	Environment_Satisfaction VARCHAR (20),
+	Gender VARCHAR (50),
+	Hourly_Rate integer,
+	Job_Involvement VARCHAR (50),
+	Job_Level integer,
+	Job_Role VARCHAR (50),
+	Job_Satisfaction VARCHAR (50),
+	Marital_Status varchar,
+	Monthly_Income integer,
+	Monthly_Rate integer,
+	Num_Companies_Worked integer,
+	Over_18 char,
+	Over_Time VARCHAR (50),
+	Percent_Salary_Hike integer,
+	Performance_Rating VARCHAR (50),
+	Relationship_Satisfaction VARCHAR (50),
+	Standard_Hours integer,
+	Stock_Option_Level integer,
+	Total_Working_Years integer,
+	Training_Times_Last_Year integer,
+	Work_Life_Balance VARCHAR (50),
+	Years_At_Company integer,
+	Years_In_Current_Role integer,
+	Years_Since_Last_Promotion integer,
+	Years_With_Curr_Manager integer
+);
+
+Importing CSV: 
+
+COPY hr(Age,Attrition,Business_Travel,
+	Daily_Rate,Department,Distance_From_Home,
+	Education,Education_Field,
+	Employee_Count,Environment_Satisfaction,
+	Gender,Hourly_Rate,Job_Involvement,
+	Job_Level,Job_Role,Job_Satisfaction,
+	Marital_Status,Monthly_Income,Monthly_Rate,
+	Num_Companies_Worked, Over_Time,
+	Percent_Salary_Hike,Performance_Rating,
+	Relationship_Satisfaction,Standard_Hours,
+	Stock_Option_Level,Total_Working_Years,
+	Training_Times_Last_Year,Work_Life_Balance,
+	Years_At_Company,Years_In_Current_Role,
+	Years_Since_Last_Promotion,Years_With_Curr_Manager)
+FROM '/Users/carolinazea/Desktop/file/HR-Employee-Attrition.csv'
+DELIMITER ','
+CSV HEADER;
+
+View all records from datasets:
+
+SELECT *
+FROM hr
+
+Handle duplicate records:
+
+SELECT Age,Attrition,Business_Travel,
+	Daily_Rate,Department,Distance_From_Home,
+	Education,Education_Field,
+	Employee_Count,Environment_Satisfaction,
+	Gender,Hourly_Rate,Job_Involvement,
+	Job_Level,Job_Role,Job_Satisfaction,
+	Marital_Status,Monthly_Income,Monthly_Rate,
+	Num_Companies_Worked, Over_Time,
+	Percent_Salary_Hike,Performance_Rating,
+	Relationship_Satisfaction,Standard_Hours,
+	Stock_Option_Level,Total_Working_Years,
+	Training_Times_Last_Year,Work_Life_Balance,
+	Years_At_Company,Years_In_Current_Role,
+	Years_Since_Last_Promotion,Years_With_Curr_Manager
+FROM hr
+GROUP BY Age,Attrition,Business_Travel,
+	Daily_Rate,Department,Distance_From_Home,
+	Education,Education_Field,
+	Employee_Count,Environment_Satisfaction,
+	Gender,Hourly_Rate,Job_Involvement,
+	Job_Level,Job_Role,Job_Satisfaction,
+	Marital_Status,Monthly_Income,Monthly_Rate,
+	Num_Companies_Worked, Over_Time,
+	Percent_Salary_Hike,Performance_Rating,
+	Relationship_Satisfaction,Standard_Hours,
+	Stock_Option_Level,Total_Working_Years,
+	Training_Times_Last_Year,Work_Life_Balance,
+	Years_At_Company,Years_In_Current_Role,
+	Years_Since_Last_Promotion,Years_With_Curr_Manager
+HAVING COUNT(*) >1;
+
+Descriptive Statistics:
+
+SELECT MIN(daily_rate) AS min_daily_rate
+       MAX(daily_rate) As max_daily_rate
+       AVG(daily_rate) AS avg_daily_rate
+       COUNT(daily_rate) AS count_daily_rate,
+       COUNT(*) AS count_rows
+FROM hr;
+
+Inquire variables:
+
+Job Roles:
+
+SELECT distinct(job_role) from hr;
+
+Can we determine how many workers are in each distinct job role?
+
+SELECT job_role, COUNT(job_role) AS total_job_role_count
+FROM hr
+GROUP BY hr.job_role;
+
+Department:
+
+Which department pays more?
+
+SELECT department, max(monthly_rate)
+FROM hr
+GROUP BY department;
+
+Education:
+
+How many workers have obtained educational degrees?
+
+SELECT education, COUNT(education) AS total_count_of_degree
+FROM hr
+GROUP BY education;
+
+Gender
+
+What is the total job performance ratings for men and females?
+
+SELECT gender, COUNT(performance_rating) AS gender_performance_rating
+FROM hr
+GROUP BY gender;
+
+Which departments has the highest numbers of each gender?
+
+SELECT gender, COUNT(gender), department
+FROM hr
+GROUP BY hr.gender, hr.department
+ORDER BY department;
+
+Is there a work life balance?
+
+SELECT work_life_balance, department, COUNT(work_life_balance) AS count_work_life_balance
+FROM hr
+GROUP BY work_life_balance, department
+ORDER BY department ASC;
+
+How about the amount of years an employee has been with the company? Does it influence hourly rate?
+
+SELECT total_working_years, hourly_rate
+FROM hr
+WHERE hourly_rate >= 100
+GROUP BY hr.hourly_rate, hr.total_working_years
+ORDER BY hr.total_working_years DESC;
+
+Does employees have a high, medium, or low job satisfaction with their employer?
+
+SELECT relationship_satisfaction, department,
+      MAX(years_at_company) AS max_years_at_company,
+      AVG(years_at_company) AS avg_years_at_company
+FROM hr
+WHERE hr.relationship.satisfaction IN ('High')
+GROUP BY hr.relationship.satisfaction, hr.department
+ORDER BY department, relationship.satisfaction;
+
+Finding total amount of employees per age
+
+SELECT age, COUNT(age) AS total_count_of_age
+FROM hr
+GROUP BY hr.age
+ORDER BY age;
+
+Which employees, depending on their marital status (Single, Divorced, Married) travels more often?
+
+SELECT marital_status, business_travel, COUNT(business_travel)
+FROM hr
+GROUP BY hr.business_travel, hr.marital_status
+ORDER BY business_travel;
