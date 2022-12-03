@@ -7,6 +7,7 @@ I uncover the factors that lead to employee attrition and explore important ques
 
 
 Findings: 
+
 • Incoming workers are choosing to enter the sales field as that department pays relatively more than any other department.
 
 • We can infer potential candidates may be required to have a Bachelors Degree (depending on the department and job responsibilites).
