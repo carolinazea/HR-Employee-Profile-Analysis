@@ -19,3 +19,5 @@ Findings:
 • Marital Status has no influence on business travel options.
 
 Please visit my website for contact information: www.carolinazea.com
+
+Medium Article: https://medium.com/@carolinaxzea/data-cleaning-in-sql-7cdd90d98eba
